@@ -17,6 +17,8 @@ Use `$this->getCssFile($less_files, $less_string)` method to compile your less f
 Can parse single or multiple files in array. You can also pass additional less code as a string to the method...
 
 ```
+$less = $modules->get("KreativanLess");
+
 $less_string = '@tm-primary-bg: blue;';
 
 $less_file = 'templates/less/less_file.less';
@@ -28,12 +30,12 @@ $array = [
 ];
 
 Single file:        
-<link rel="stylesheet" type="text/css" href="<?= $modules->get("KreativanLess")->getCssFile($less_file); ?>">    
+<link rel="stylesheet" type="text/css" href="<?= $less->getCssFile($less_file); ?>">    
 
 Array of files:        
-<link rel="stylesheet" type="text/css" href="<?= $modules->get("KreativanLess")->getCssFile($array); ?>  
+<link rel="stylesheet" type="text/css" href="<?= $less->getCssFile($array); ?>  
 
 Files + Additional less code...    
-<link rel="stylesheet" type="text/css" href="<?= $modules->get("KreativanLess")->getCssFile($array, $less_string); ?>    
+<link rel="stylesheet" type="text/css" href="<?= $less->getCssFile($array, $less_string); ?>    
 ```
 
