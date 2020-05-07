@@ -13,11 +13,10 @@ NOTE: Module is not autoload, but it is watching the files passed to the method 
 
 ### How yo use
 
-Use `$this->getCssFile($less_files, $less_string)` method to compile your less files and get css file url.
+Use `$this->getCssFile($less_files, $less_string)` method to parse your less files and get css file URL.    
 Can parse single or multiple files in array. You can also pass additional less code as a string to the method...
 
 ```
-
 $less_string = '@tm-primary-bg: blue;';
 
 $less_file = 'templates/less/less_file.less';
@@ -40,4 +39,5 @@ $less = $modules->get("KreativanLess");
 // Files + Additional less code...    
 <link rel="stylesheet" type="text/css" href="<?= $less->getCssFile($array, $less_string); ?>    
 ```
+NOTE: `$modules->get("KreativanLess")` method will always return compiled css file URL.
 
