@@ -29,13 +29,13 @@ $array = [
 'templates/less/file-3.less',
 ];
 
-Single file:        
+// Single file:        
 <link rel="stylesheet" type="text/css" href="<?= $less->getCssFile($less_file); ?>">    
 
-Array of files:        
+// Array of files:        
 <link rel="stylesheet" type="text/css" href="<?= $less->getCssFile($array); ?>  
 
-Files + Additional less code...    
+// Files + Additional less code...    
 <link rel="stylesheet" type="text/css" href="<?= $less->getCssFile($array, $less_string); ?>    
 ```
 
