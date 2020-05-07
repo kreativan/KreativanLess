@@ -63,8 +63,10 @@ class KreativanLess extends WireData implements Module {
 
     // generate random css prefix and se the timestamp
     $rand = rand(100, 1000);
+    $prefix = $this->auto_cache_buster == "1" ? "less_$rand" : $this->css_prefix;
+
     $settings = [
-      "css_prefix" => $this->auto_cache_buster == "1" ? "less_$rand" : $this->css_prefix,
+      "css_prefix" => $prefix,
       "timestamp" => time(),
     ];
     $old_data = $this->modules->getModuleConfigData($this->className());
@@ -72,13 +74,15 @@ class KreativanLess extends WireData implements Module {
     $this->modules->saveConfig($this->className(), $data);
 
     // put tthe compiled data to the css file
-    $file_path  = "{$this->folder}less_{$rand}_main.css";
+    $file_path  = $this->folder . "{$prefix}_main.css";
     $css = $this->getCssData($less_files);
     if(!is_dir($this->folder)) $this->files->mkdir($this->folder);
     $this->files->filePutContents($file_path, $css);
 
+    // d("compiled");
+
     // return new compiled
-    return $this->folderUrl . "less_{$rand}_main.css";
+    return $this->folderUrl . "{$prefix}_main.css";
 
   }
 
