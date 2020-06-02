@@ -142,13 +142,13 @@ class KreativanLess extends WireData implements Module {
   // Check if file is changed
   // If file timestamp is bigger then saved one, it's changed...
   public function fileIsChanged($files) {
-    $isChnaged = false;
+    $isChanged = false;
     if(is_array($files)) {
-      foreach($files as $f) if (filemtime($f) > $this->timestamp) $isChnaged = true;
+      foreach($files as $f) if (filemtime($f) > $this->timestamp) $isChanged = true;
     } else {
-      if (filemtime($files) > $this->timestamp) $isChnaged = true;
+      if (filemtime($files) > $this->timestamp) $isChanged = true;
     }
-    return $isChnaged;
+    return $isChanged;
   }
 
 }
