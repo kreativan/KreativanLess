@@ -63,7 +63,7 @@ class KreativanLess extends WireData implements Module {
 
     // generate random css prefix and se the timestamp
     $rand = rand(100, 1000);
-    $prefix = $this->auto_cache_buster == "1" ? "less_$rand" : $this->css_prefix;
+    $prefix = $this->auto_cache_buster == "1" ? "css_$rand" : $this->css_prefix;
 
     $settings = [
       "css_prefix" => $prefix,
