@@ -11,6 +11,12 @@
 class KreativanLessConfig extends ModuleConfig {
 
 	public function getInputfields() {
+
+		if($this->input->get->compile) {
+			$this->modules->get("KreativanLess")->clearCache();
+			$this->session->redirect("./edit?name=KreativanLess&collapse_info=1");
+		}
+
 		$inputfields = parent::getInputfields();
 		$wrapper = new InputfieldWrapper();
 
@@ -24,19 +30,10 @@ class KreativanLessConfig extends ModuleConfig {
 		$options->icon = "fa-toggle-on";
 		$wrapper->add($options);
 
-		$f = $this->wire('modules')->get("InputfieldText");
-		$f->attr('name', 'css_prefix');
-		$f->label = "CSS file prefix";
-		$f->value = "less";
-		$f->required = true;
-		$f->columnWidth = "33%";
-		$f->description = "Change the prefix to bust the browser cache and force parsing on next page load.";
-		$options->add($f);
-
-		// cache_buster
+		// dev_mode
 		$f = $this->wire('modules')->get("InputfieldRadios");
-		$f->attr('name', 'auto_cache_buster');
-		$f->label = 'Auto browser cache buster';
+		$f->attr('name', 'dev_mode');
+		$f->label = 'Development Mode';
 		$f->options = array(
 			'1' => "Yes",
 			'2' => "No"
@@ -44,8 +41,8 @@ class KreativanLessConfig extends ModuleConfig {
 		$f->required = true;
 		$f->defaultValue = "2";
 		$f->optionColumns = 1;
-		$f->columnWidth = "33%";
-		$f->description = "Bust browser cache automatically. This will change css prefix every time less is compiled.";
+		$f->columnWidth = "50%";
+		$f->description = "**less files will be parsed on every page load**. Module is watching for changes and runs parser automatically, but if for any reason you need to force parsing, turn this option on. Just `dont forget to turn it off in production`, will affect page load speed";
 		$options->add($f);
 
 		// minify_css
@@ -59,23 +56,8 @@ class KreativanLessConfig extends ModuleConfig {
 		$f->required = true;
 		$f->defaultValue = "1";
 		$f->optionColumns = 1;
-		$f->columnWidth = "33%";
+		$f->columnWidth = "50%";
 		$f->description = "Remove comments and whitespace to generate minimized CSS files.";
-		$options->add($f);
-
-		// dev_mode
-		$f = $this->wire('modules')->get("InputfieldRadios");
-		$f->attr('name', 'dev_mode');
-		$f->label = 'Development Mode';
-		$f->options = array(
-			'1' => "Yes",
-			'2' => "No"
-		);
-		$f->required = true;
-		$f->defaultValue = "2";
-		$f->optionColumns = 1;
-		$f->columnWidth = "100%";
-		$f->description = "If enabled, **less files will be parsed on every page load**. Module is watching for changes and runs parser automatically, but if for any reason you need to force parsing, turn this option on. Just `dont forget to turn it off in production`, can affect page load speed a lot...";
 		$options->add($f);
 
 		$f = $this->wire('modules')->get("InputfieldText");
@@ -84,6 +66,10 @@ class KreativanLessConfig extends ModuleConfig {
 		$f->columnWidth = "100%";
 		$f->collapsed = "8";
 		$f->description = "Last parse timestamp, used to track files changes";
+		$options->add($f);
+
+		$f = $this->wire('modules')->get("InputfieldMarkup");
+		$f->value = "<a href='./edit?name=KreativanLess&collapse_info=1&compile=1' class='uk-button uk-button-primary'>Compile</a>";
 		$options->add($f);
 
 		$inputfields->add($options);

@@ -2,14 +2,12 @@
 ProcessWire less parser module. Using Wikimedia fork of a PHP port of the official LESS processor https://github.com/wikimedia/less.php.    
 
 Modules comes with few options:
-- **Css File prefix**.  Change it manually to bust the browser cache...
--	**Auto browser cache buster**. Change css prefix every time less is parsed, to make sure browser cache is busted
+-	**Auto browser cache buster** based on a timestamp
 - **Minify CSS**. Remove comments and whitespace to generate minimized CSS files.
 - **Development Mode**. If enabled, less files will be parsed on every page load. Module is watching for changes and runs parser automatically, but if for any reason you need to force parsing, turn this option on. Just dont forget to turn it off in production, can affect page load speed a lot...
 
 NOTE: Module is not autoload, but it is watching the files passed to the method for changes and runs parser automatically.
 
-![KreativanLess](KreativanLess.png)    
 
 ### How yo use
 

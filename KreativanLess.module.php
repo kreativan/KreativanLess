@@ -23,8 +23,8 @@ class KreativanLess extends WireData implements Module {
   }
 
   public function __construct() {
-    $this->folder     = $this->config->paths->assets . "kreativan-less/";
-    $this->folderUrl  = $this->config->urls->assets . "kreativan-less/";
+    $this->folder = $this->config->paths->assets;
+    $this->folderUrl = $this->config->urls->assets;
   }
 
   public function init() {
@@ -39,14 +39,12 @@ class KreativanLess extends WireData implements Module {
    *  @example $this->getCssFile($my_less_file, "@primary-bg: blue;")
    */
   public function getCssFile($less_files, $less = "") {
-    // existing files
-    $file_path  = "{$this->folder}{$this->css_prefix}_main.css";
-    $file_url = "{$this->folderUrl}{$this->css_prefix}_main.css";
-    // if something changed compile and return new file, if not just return old one
-    if(!file_exists($file_path) || $this->dev_mode == "1" || $this->fileIsChanged($less_files)) {
+    $main_css = $this->folder . "main.css";
+    // if something changed compile and return new file (compile and refresh timestamp)
+    if(!file_exists($main_css) || $this->dev_mode == "1" || $this->fileIsChanged($less_files)) {
       return $this->compile($less_files);
     } else {
-      return $file_url;
+      return $this->folderUrl . "main.css?v={$this->timestamp}";
     }
   }
 
@@ -55,18 +53,13 @@ class KreativanLess extends WireData implements Module {
    *  get the css data from @see $this->getCssData()
    *  and put it in to a file
    *  also clear cache, set timestamp and change css_prefix if auto_cache_buster is on
+   *  @return string compiled main.css url
    */
   public function compile($less_files, $less = "") {
 
-    // clear cache
-    $this->clearCache();
-
-    // generate random css prefix and se the timestamp
-    $rand = rand(100, 1000);
-    $prefix = $this->auto_cache_buster == "1" ? "css_$rand" : $this->css_prefix;
-
+    // save the timestamp to know when to compile
+    // we will use timestamp in main.css link to bust the browser cache
     $settings = [
-      "css_prefix" => $prefix,
       "timestamp" => time(),
     ];
     $old_data = $this->modules->getModuleConfigData($this->className());
@@ -74,15 +67,13 @@ class KreativanLess extends WireData implements Module {
     $this->modules->saveConfig($this->className(), $data);
 
     // put tthe compiled data to the css file
-    $file_path  = $this->folder . "{$prefix}_main.css";
+    $file_path  = $this->folder . "main.css";
     $css = $this->getCssData($less_files);
     if(!is_dir($this->folder)) $this->files->mkdir($this->folder);
     $this->files->filePutContents($file_path, $css);
 
-    // d("compiled");
-
     // return new compiled
-    return $this->folderUrl . "{$prefix}_main.css";
+    return $this->folderUrl . "main.css?v={$this->timestamp}";
 
   }
 
@@ -133,13 +124,7 @@ class KreativanLess extends WireData implements Module {
 
   }
 
-  // Clear cache
-  // just delete target folder...
-  public function clearCache() {
-    $this->files->rmdir($this->folder, true);
-  }
-
-  // Check if file is changed
+  // Check if file is chnaged
   // If file timestamp is bigger then saved one, it's changed...
   public function fileIsChanged($files) {
     $isChanged = false;
@@ -149,6 +134,12 @@ class KreativanLess extends WireData implements Module {
       if (filemtime($files) > $this->timestamp) $isChanged = true;
     }
     return $isChanged;
+  }
+
+  // Clear cache
+  // just delete target folder...
+  public function clearCache() {
+    $this->files->unlink($this->folder . "main.css", true);
   }
 
 }
