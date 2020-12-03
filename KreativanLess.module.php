@@ -73,7 +73,7 @@ class KreativanLess extends WireData implements Module {
     $this->files->filePutContents($file_path, $css);
 
     // return new compiled
-    return $this->folderUrl . "main.css?v={$this->timestamp}";
+    return $this->folderUrl . "main.css?v=" . $settings["timestamp"];
 
   }
 
